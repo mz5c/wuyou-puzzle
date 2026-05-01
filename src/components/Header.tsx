@@ -1,4 +1,4 @@
-import { PuzzleMode } from '../types'
+import type { PuzzleMode } from '../types'
 import styles from './Header.module.css'
 
 interface HeaderProps {

@@ -1,6 +1,6 @@
 import Tile from './Tile'
 import styles from './PuzzleBoard.module.css'
-import { PuzzleGameState } from '../types'
+import type { PuzzleGameState } from '../types'
 
 interface PuzzleBoardProps {
   state: PuzzleGameState

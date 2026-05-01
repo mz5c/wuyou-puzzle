@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { LeaderboardEntry, PuzzleMode, Difficulty } from '../types'
+import type { LeaderboardEntry, PuzzleMode, Difficulty } from '../types'
 
 const STORAGE_KEY = 'wuyou-puzzle-leaderboard'
 const MAX_ENTRIES_PER_CATEGORY = 20

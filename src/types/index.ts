@@ -3,7 +3,7 @@ export type Difficulty = 3 | 4 | 5
 
 export interface PuzzleGameState {
   tiles: number[]
-  size: number
+  size: Difficulty
   emptyIndex: number
   moveCount: number
   isPaused: boolean

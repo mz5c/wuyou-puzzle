@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { PuzzleMode, Difficulty, LeaderboardEntry } from '../types'
+import type { PuzzleMode, Difficulty, LeaderboardEntry } from '../types'
 import styles from './LeaderboardPage.module.css'
 
 interface LeaderboardPageProps {

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react'
-import { PuzzleGameState, Difficulty } from '../types'
+import type { PuzzleGameState, Difficulty } from '../types'
 import { shuffleTiles } from '../utils/shuffle'
 
 function createInitialState(size: Difficulty): PuzzleGameState {

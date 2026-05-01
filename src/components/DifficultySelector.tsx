@@ -1,4 +1,4 @@
-import { Difficulty } from '../types'
+import type { Difficulty } from '../types'
 import styles from './DifficultySelector.module.css'
 
 interface DifficultySelectorProps {
