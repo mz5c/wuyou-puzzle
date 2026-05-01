@@ -1,0 +1,12 @@
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; }
+.modal { background: white; border-radius: 16px; padding: 32px; text-align: center; max-width: 320px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+.title { font-size: 1.5rem; font-weight: 700; margin: 0 0 8px; }
+.subtitle { color: #666; margin: 0 0 20px; }
+.stats { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.statLabel { font-size: 0.8rem; color: #999; }
+.statValue { font-size: 1.2rem; font-weight: 700; color: #4a90d9; }
+.input { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem; margin-bottom: 12px; box-sizing: border-box; }
+.input:focus { outline: none; border-color: #4a90d9; }
+.saveButton { background: #4a90d9; color: white; padding: 10px 24px; border: none; border-radius: 8px; font-size: 0.9rem; font-weight: 500; cursor: pointer; width: 100%; }
+.saveButton:hover { background: #357abd; }
+.saveButton:disabled { opacity: 0.5; cursor: default; }
