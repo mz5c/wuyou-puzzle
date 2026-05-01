@@ -1,0 +1,19 @@
+.selector {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  max-width: 400px;
+  margin: 0 auto 16px;
+}
+.option {
+  padding: 3px 14px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  border: none;
+  font-weight: 500;
+}
+.active { background: #4a90d9; color: white; }
+.inactive { background: #f0f2f5; color: #666; }
+.inactive:hover { background: #e0e4e8; }
