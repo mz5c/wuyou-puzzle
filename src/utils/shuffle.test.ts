@@ -17,9 +17,9 @@ describe('isSolvable', () => {
     expect(isSolvable(tiles, 3)).toBe(false)
   })
 
-  it('should handle even-sized puzzles (4x4) correctly', () => {
-    const tiles = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
-    expect(isSolvable(tiles, 4)).toBe(true)
+  it('should return false for an unsolvable 4x4 configuration', () => {
+    const tiles = [2, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
+    expect(isSolvable(tiles, 4)).toBe(false)
   })
 })
 

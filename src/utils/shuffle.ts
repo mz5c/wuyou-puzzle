@@ -33,6 +33,7 @@ export function isSolvable(tiles: number[], size: number): boolean {
  * Fisher-Yates shuffle that guarantees solvability.
  */
 export function shuffleTiles(size: number): { tiles: number[]; emptyIndex: number } {
+  if (size < 2) throw new Error('Puzzle size must be at least 2')
   const totalTiles = size * size
   const tiles = Array.from({ length: totalTiles }, (_, i) => i)
 
