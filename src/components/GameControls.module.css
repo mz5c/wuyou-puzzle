@@ -1,0 +1,20 @@
+.controls {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  max-width: 400px;
+  margin: 0 auto;
+}
+button {
+  padding: 8px 22px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+button:hover { opacity: 0.85; }
+button:active { opacity: 0.7; }
+.primary { background: #4a90d9; color: white; }
+.secondary { background: #f0f2f5; color: #555; border: 1px solid #ddd; }
