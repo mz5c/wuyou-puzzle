@@ -17,10 +17,8 @@ interface ImagePuzzlePageProps {
   onSaveScore: (time: number, moves: number, difficulty: Difficulty, playerName?: string, thumb?: string) => void
 }
 
-function sliceImage(imageData: string, size: number): string[] {
-  const img = new Image()
-  img.src = imageData
-  const tileSize = img.width / size
+function sliceImage(img: HTMLImageElement, size: number): string[] {
+  const tileSize = img.naturalWidth / size
   const parts: string[] = []
   for (let row = 0; row < size; row++) {
     for (let col = 0; col < size; col++) {
@@ -35,6 +33,15 @@ function sliceImage(imageData: string, size: number): string[] {
   return parts
 }
 
+function loadImage(src: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => resolve(img)
+    img.onerror = reject
+    img.src = src
+  })
+}
+
 export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageProps) {
   const { state, movableIndices, moveTile, moveByDirection, reset, togglePause, changeDifficulty } = usePuzzleGame(3)
   const timer = useTimer(state.isPaused, state.isComplete)
@@ -42,25 +49,32 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   const [imageParts, setImageParts] = useState<string[]>([])
   const [imageThumb, setImageThumb] = useState('')
   const [showHint, setShowHint] = useState(false)
+  const loadedImageRef = useRef<HTMLImageElement | null>(null)
 
-  const handleImageReady = useCallback((data: string) => {
-    setImageReady(true)
-    setImageThumb(data)
-    const parts = sliceImage(data, 3)
-    setImageParts(parts)
-    reset(3)
-    timer.reset()
-    setShowHint(false)
+  const handleImageReady = useCallback(async (data: string) => {
+    try {
+      const img = await loadImage(data)
+      loadedImageRef.current = img
+      setImageThumb(data)
+      const parts = sliceImage(img, 3)
+      setImageParts(parts)
+      setImageReady(true)
+      reset(3)
+      timer.reset()
+      setShowHint(false)
+    } catch {
+      alert('图片加载失败，请重试')
+    }
   }, [reset, timer])
 
   const handleDifficultyChange = useCallback((size: Difficulty) => {
-    if (!imageReady) return
+    if (!imageReady || !loadedImageRef.current) return
     changeDifficulty(size)
     timer.reset()
     setShowHint(false)
-    const parts = sliceImage(imageThumb, size)
+    const parts = sliceImage(loadedImageRef.current, size)
     setImageParts(parts)
-  }, [imageReady, imageThumb, changeDifficulty, timer])
+  }, [imageReady, changeDifficulty, timer])
 
   // Keyboard controls
   useEffect(() => {
