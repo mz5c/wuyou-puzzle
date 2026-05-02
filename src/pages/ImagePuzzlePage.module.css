@@ -1,1 +1,23 @@
 .page { max-width: 500px; margin: 0 auto; padding: 16px; }
+.referenceBtn {
+  display: block;
+  margin: 8px auto 0;
+  background: none;
+  border: 1px solid #ddd;
+  color: #666;
+  padding: 4px 14px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.referenceBtn:hover { border-color: #4a90d9; color: #4a90d9; }
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  display: flex; align-items: center; justify-content: center; z-index: 200;
+  cursor: pointer;
+}
+.referenceImg {
+  max-width: 90vw; max-height: 85vh;
+  border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}

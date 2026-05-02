@@ -49,6 +49,7 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   const [imageParts, setImageParts] = useState<string[]>([])
   const [imageThumb, setImageThumb] = useState('')
   const [showHint, setShowHint] = useState(false)
+  const [showReference, setShowReference] = useState(false)
   const loadedImageRef = useRef<HTMLImageElement | null>(null)
 
   const handleImageReady = useCallback(async (data: string) => {
@@ -131,9 +132,15 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
     <div className={styles.page}>
       <DifficultySelector current={state.size} onChange={handleDifficultyChange} />
       <PuzzleBoard state={state} movableIndices={showHint ? movableIndices : []} isImageMode={true} imageParts={imageParts} onTileClick={handleTileClick} />
+      <button className={styles.referenceBtn} onClick={() => setShowReference(r => !r)}>🖼 查看原图</button>
       <GameStats time={timer.time} moves={state.moveCount} showHint={showHint} onToggleHint={() => setShowHint(h => !h)} />
       <GameControls onShuffle={handleShuffle} onPause={togglePause} onReset={() => { reset(); timer.reset() }} isPaused={state.isPaused} />
       <DirectionPad onDirection={moveByDirection} />
+      {showReference && (
+        <div className={styles.overlay} onClick={() => setShowReference(false)}>
+          <img src={imageThumb} alt="原图参考" className={styles.referenceImg} />
+        </div>
+      )}
       {state.isComplete && (
         <CompletionModal time={timer.time} moves={state.moveCount} onSave={name => onSaveScore(timer.time, state.moveCount, state.size, name, imageThumb)} onClose={() => {}} />
       )}

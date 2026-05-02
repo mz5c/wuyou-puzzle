@@ -20,8 +20,8 @@ export default function ImageUploader({ onImageReady }: ImageUploaderProps) {
     const img = new Image()
     img.onload = () => {
       const size = Math.min(img.width, img.height)
-      const offsetX = (img.width - size) / 2
-      const offsetY = (img.height - size) / 2
+      const offsetX = 0
+      const offsetY = 0
       const canvas = document.createElement('canvas')
       canvas.width = size
       canvas.height = size
