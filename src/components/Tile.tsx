@@ -6,11 +6,11 @@ interface TileProps {
   size: number
   isMovable: boolean
   isImageMode: boolean
-  imagePart?: string
+  imageSrc?: string
   onClick: () => void
 }
 
-export default function Tile({ value, size, isMovable, isImageMode, imagePart, onClick }: TileProps) {
+export default function Tile({ value, size, isMovable, isImageMode, imageSrc, onClick }: TileProps) {
   if (value === 0) {
     return (
       <div
@@ -34,8 +34,8 @@ export default function Tile({ value, size, isMovable, isImageMode, imagePart, o
     aspectRatio: '1',
   }
 
-  if (isImageMode && imagePart) {
-    style.backgroundImage = `url(${imagePart})`
+  if (isImageMode && imageSrc) {
+    style.backgroundImage = `url(${imageSrc})`
     style.backgroundSize = `${size * 100}%`
     const tileIndex = value - 1
     const row = Math.floor(tileIndex / size)

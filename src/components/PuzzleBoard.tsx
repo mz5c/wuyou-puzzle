@@ -6,11 +6,11 @@ interface PuzzleBoardProps {
   state: PuzzleGameState
   movableIndices: number[]
   isImageMode: boolean
-  imageParts?: string[]
+  imageSrc?: string
   onTileClick: (index: number) => void
 }
 
-export default function PuzzleBoard({ state, movableIndices, isImageMode, imageParts, onTileClick }: PuzzleBoardProps) {
+export default function PuzzleBoard({ state, movableIndices, isImageMode, imageSrc, onTileClick }: PuzzleBoardProps) {
   return (
     <div className={styles.board}>
       {state.tiles.map((value, index) => (
@@ -20,7 +20,7 @@ export default function PuzzleBoard({ state, movableIndices, isImageMode, imageP
           size={state.size}
           isMovable={movableIndices.includes(index)}
           isImageMode={isImageMode}
-          imagePart={imageParts?.[value - 1]}
+          imageSrc={imageSrc}
           onClick={() => onTileClick(index)}
         />
       ))}

@@ -44,7 +44,7 @@ export function usePuzzleGame(initialSize: Difficulty = 3) {
       newTiles[tileIndex] = 0
 
       const newMoveCount = prev.moveCount + 1
-      const isComplete = newTiles.every((t, i) => t === i) && newTiles[newTiles.length - 1] === 0
+      const isComplete = newTiles.every((t, i) => t === i)
 
       return {
         ...prev,
@@ -83,7 +83,7 @@ export function usePuzzleGame(initialSize: Difficulty = 3) {
       newTiles[targetIndex] = 0
 
       const newMoveCount = prev.moveCount + 1
-      const isComplete = newTiles.every((t, i) => t === i) && newTiles[newTiles.length - 1] === 0
+      const isComplete = newTiles.every((t, i) => t === i)
 
       return {
         ...prev,

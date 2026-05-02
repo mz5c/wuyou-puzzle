@@ -17,22 +17,6 @@ interface ImagePuzzlePageProps {
   onSaveScore: (time: number, moves: number, difficulty: Difficulty, playerName?: string, thumb?: string) => void
 }
 
-function sliceImage(img: HTMLImageElement, size: number): string[] {
-  const tileSize = img.naturalWidth / size
-  const parts: string[] = []
-  for (let row = 0; row < size; row++) {
-    for (let col = 0; col < size; col++) {
-      const tileCanvas = document.createElement('canvas')
-      tileCanvas.width = tileSize
-      tileCanvas.height = tileSize
-      const ctx = tileCanvas.getContext('2d')!
-      ctx.drawImage(img, col * tileSize, row * tileSize, tileSize, tileSize, 0, 0, tileSize, tileSize)
-      parts.push(tileCanvas.toDataURL('image/jpeg', 0.8))
-    }
-  }
-  return parts
-}
-
 function loadImage(src: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image()
@@ -46,20 +30,15 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   const { state, movableIndices, moveTile, moveByDirection, reset, togglePause, changeDifficulty } = usePuzzleGame(3)
   const timer = useTimer(state.isPaused, state.isComplete, state.hasStarted)
   const [imageReady, setImageReady] = useState(false)
-  const [imageParts, setImageParts] = useState<string[]>([])
   const [imageThumb, setImageThumb] = useState('')
   const [showHint, setShowHint] = useState(false)
   const [showReference, setShowReference] = useState(false)
   const [completionDismissed, setCompletionDismissed] = useState(false)
-  const loadedImageRef = useRef<HTMLImageElement | null>(null)
 
   const handleImageReady = useCallback(async (data: string) => {
     try {
-      const img = await loadImage(data)
-      loadedImageRef.current = img
+      await loadImage(data)
       setImageThumb(data)
-      const parts = sliceImage(img, 3)
-      setImageParts(parts)
       setImageReady(true)
       reset(3)
       timer.reset()
@@ -70,12 +49,10 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   }, [reset, timer])
 
   const handleDifficultyChange = useCallback((size: Difficulty) => {
-    if (!imageReady || !loadedImageRef.current) return
+    if (!imageReady) return
     changeDifficulty(size)
     timer.reset()
     setShowHint(false)
-    const parts = sliceImage(loadedImageRef.current, size)
-    setImageParts(parts)
   }, [imageReady, changeDifficulty, timer])
 
   // Keyboard controls
@@ -133,10 +110,10 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   return (
     <div className={styles.page}>
       <DifficultySelector current={state.size} onChange={handleDifficultyChange} />
-      <PuzzleBoard state={state} movableIndices={showHint ? movableIndices : []} isImageMode={true} imageParts={imageParts} onTileClick={handleTileClick} />
+      <PuzzleBoard state={state} movableIndices={showHint ? movableIndices : []} isImageMode={true} imageSrc={imageThumb} onTileClick={handleTileClick} />
       <div className={styles.imageActions}>
         <button className={styles.referenceBtn} onClick={() => setShowReference(r => !r)}>🖼 查看原图</button>
-        <button className={styles.referenceBtn} onClick={() => { setImageReady(false); setImageParts([]); setImageThumb(''); setCompletionDismissed(false); }}>🔄 更换图片</button>
+        <button className={styles.referenceBtn} onClick={() => { setImageReady(false); setImageThumb(''); setCompletionDismissed(false); }}>🔄 更换图片</button>
       </div>
       <GameStats time={timer.time} moves={state.moveCount} showHint={showHint} onToggleHint={() => setShowHint(h => !h)} />
       <GameControls onShuffle={handleShuffle} onPause={togglePause} onReset={() => { reset(); timer.reset() }} isPaused={state.isPaused} />
