@@ -19,7 +19,7 @@
 - **框架**: React 19 + TypeScript
 - **构建工具**: Vite 8
 - **样式方案**: CSS Modules
-- **测试**: Vitest
+- **测试**: Vitest 4
 - **音效**: Web Audio API（无需外部音频文件）
 - **图片裁剪**: Canvas API
 - **状态管理**: React Hooks（无外部状态库）
@@ -77,7 +77,6 @@ src/
 │   ├── NumberPuzzlePage.tsx  # 数字拼图页面
 │   ├── ImagePuzzlePage.tsx   # 图片拼图页面
 │   └── LeaderboardPage.tsx   # 排行榜页面
-└── index.css
 ```
 
 ## 核心技术
