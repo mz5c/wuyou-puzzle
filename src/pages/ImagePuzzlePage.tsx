@@ -44,7 +44,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 
 export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageProps) {
   const { state, movableIndices, moveTile, moveByDirection, reset, togglePause, changeDifficulty } = usePuzzleGame(3)
-  const timer = useTimer(state.isPaused, state.isComplete)
+  const timer = useTimer(state.isPaused, state.isComplete, state.hasStarted)
   const [imageReady, setImageReady] = useState(false)
   const [imageParts, setImageParts] = useState<string[]>([])
   const [imageThumb, setImageThumb] = useState('')

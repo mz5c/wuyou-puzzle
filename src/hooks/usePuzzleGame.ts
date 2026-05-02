@@ -11,6 +11,7 @@ function createInitialState(size: Difficulty): PuzzleGameState {
     moveCount: 0,
     isPaused: false,
     isComplete: false,
+    hasStarted: false,
   }
 }
 
@@ -51,6 +52,7 @@ export function usePuzzleGame(initialSize: Difficulty = 3) {
         emptyIndex: tileIndex,
         moveCount: newMoveCount,
         isComplete,
+        hasStarted: true,
       }
     })
   }, [isAdjacent])
@@ -89,6 +91,7 @@ export function usePuzzleGame(initialSize: Difficulty = 3) {
         emptyIndex: targetIndex,
         moveCount: newMoveCount,
         isComplete,
+        hasStarted: true,
       }
     })
   }, [])

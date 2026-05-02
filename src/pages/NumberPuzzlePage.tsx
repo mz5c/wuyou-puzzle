@@ -18,7 +18,7 @@ interface NumberPuzzlePageProps {
 
 export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePageProps) {
   const { state, movableIndices, moveTile, moveByDirection, reset, togglePause, changeDifficulty } = usePuzzleGame(3)
-  const timer = useTimer(state.isPaused, state.isComplete)
+  const timer = useTimer(state.isPaused, state.isComplete, state.hasStarted)
   const [showHint, setShowHint] = useState(false)
 
   // Keyboard controls

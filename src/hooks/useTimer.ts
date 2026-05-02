@@ -1,6 +1,6 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 
-export function useTimer(isPaused: boolean, isComplete: boolean) {
+export function useTimer(isPaused: boolean, isComplete: boolean, hasStarted: boolean) {
   const [time, setTime] = useState(0)
   const [resetKey, setResetKey] = useState(0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -13,7 +13,7 @@ export function useTimer(isPaused: boolean, isComplete: boolean) {
   }, [])
 
   useEffect(() => {
-    if (isPaused || isComplete) {
+    if (!hasStarted || isPaused || isComplete) {
       clearTimer()
     } else if (!intervalRef.current) {
       intervalRef.current = setInterval(() => {
@@ -21,7 +21,7 @@ export function useTimer(isPaused: boolean, isComplete: boolean) {
       }, 1000)
     }
     return clearTimer
-  }, [isPaused, isComplete, clearTimer, resetKey])
+  }, [hasStarted, isPaused, isComplete, clearTimer, resetKey])
 
   const reset = useCallback(() => {
     clearTimer()

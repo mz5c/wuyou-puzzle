@@ -8,6 +8,7 @@ export interface PuzzleGameState {
   moveCount: number
   isPaused: boolean
   isComplete: boolean
+  hasStarted: boolean
 }
 
 export interface LeaderboardEntry {
