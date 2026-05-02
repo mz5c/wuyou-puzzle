@@ -1,4 +1,5 @@
 .page { max-width: 500px; margin: 0 auto; padding: 16px; }
+.imageActions { display: flex; gap: 8px; justify-content: center; margin: 8px auto 0; }
 .referenceBtn {
   display: block;
   margin: 8px auto 0;

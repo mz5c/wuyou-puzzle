@@ -26,7 +26,10 @@ export default function CompletionModal({ time, moves, onSave, onClose }: Comple
           <div><div className={styles.statLabel}>步数</div><div className={styles.statValue}>{moves}</div></div>
         </div>
         <input className={styles.input} placeholder="输入你的名字" value={name} onChange={e => setName(e.target.value)} maxLength={12} />
-        <button className={styles.saveButton} disabled={!name.trim()} onClick={() => onSave(name.trim() || '匿名')}>保存记录</button>
+        <div className={styles.buttons}>
+          <button className={styles.saveButton} disabled={!name.trim()} onClick={() => onSave(name.trim() || '匿名')}>保存记录</button>
+          <button className={styles.dismissButton} onClick={onClose}>不保存</button>
+        </div>
       </div>
     </div>
   )

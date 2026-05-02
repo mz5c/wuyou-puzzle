@@ -20,6 +20,7 @@ export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePag
   const { state, movableIndices, moveTile, moveByDirection, reset, togglePause, changeDifficulty } = usePuzzleGame(3)
   const timer = useTimer(state.isPaused, state.isComplete, state.hasStarted)
   const [showHint, setShowHint] = useState(false)
+  const [completionDismissed, setCompletionDismissed] = useState(false)
 
   // Keyboard controls
   useEffect(() => {
@@ -62,6 +63,7 @@ export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePag
     reset()
     timer.reset()
     setShowHint(false)
+    setCompletionDismissed(false)
   }, [reset, timer])
 
   const handleDifficultyChange = useCallback((size: Difficulty) => {
@@ -77,8 +79,8 @@ export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePag
       <GameStats time={timer.time} moves={state.moveCount} showHint={showHint} onToggleHint={() => setShowHint(h => !h)} />
       <GameControls onShuffle={handleShuffle} onPause={togglePause} onReset={handleShuffle} isPaused={state.isPaused} />
       <DirectionPad onDirection={moveByDirection} />
-      {state.isComplete && (
-        <CompletionModal time={timer.time} moves={state.moveCount} onSave={name => onSaveScore(timer.time, state.moveCount, state.size, name)} onClose={() => {}} />
+      {state.isComplete && !completionDismissed && (
+        <CompletionModal time={timer.time} moves={state.moveCount} onSave={name => { onSaveScore(timer.time, state.moveCount, state.size, name); setCompletionDismissed(true) }} onClose={() => setCompletionDismissed(true)} />
       )}
     </div>
   )
