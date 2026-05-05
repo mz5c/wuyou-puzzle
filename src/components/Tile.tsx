@@ -1,4 +1,4 @@
-import { type CSSProperties } from 'react'
+import { type CSSProperties, memo } from 'react'
 import styles from './Tile.module.css'
 
 interface TileProps {
@@ -13,7 +13,7 @@ interface TileProps {
   transitionDuration?: string
 }
 
-export default function Tile({ value, size, col, row, isMovable, isImageMode, imageSrc, onClick, transitionDuration }: TileProps) {
+function Tile({ value, size, col, row, isMovable, isImageMode, imageSrc, onClick, transitionDuration }: TileProps) {
   const style: CSSProperties = {
     width: `${100 / size}%`,
     aspectRatio: '1',
@@ -61,3 +61,14 @@ export default function Tile({ value, size, col, row, isMovable, isImageMode, im
     </div>
   )
 }
+
+export default memo(Tile, (prev, next) => {
+  return prev.value === next.value &&
+    prev.size === next.size &&
+    prev.col === next.col &&
+    prev.row === next.row &&
+    prev.isMovable === next.isMovable &&
+    prev.isImageMode === next.isImageMode &&
+    prev.imageSrc === next.imageSrc &&
+    prev.transitionDuration === next.transitionDuration
+})
