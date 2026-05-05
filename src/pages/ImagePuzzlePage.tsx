@@ -1,6 +1,5 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
-import { usePuzzleGame } from '../hooks/usePuzzleGame'
-import { useTimer } from '../hooks/useTimer'
+import { useState, useCallback } from 'react'
+import { usePuzzleController } from '../hooks/usePuzzleController'
 import { useSound } from '../hooks/useSound'
 import type { Difficulty } from '../types'
 import PuzzleBoard from '../components/PuzzleBoard'
@@ -27,81 +26,26 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 }
 
 export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageProps) {
-  const { state, movableIndices, moveTile, moveByDirection, reset, togglePause, changeDifficulty, isShuffling } = usePuzzleGame(3)
-  const timer = useTimer(state.isPaused, state.isComplete, state.hasStarted)
   const [imageReady, setImageReady] = useState(false)
   const [imageThumb, setImageThumb] = useState('')
-  const [showHint, setShowHint] = useState(false)
   const [showReference, setShowReference] = useState(false)
-  const [completionDismissed, setCompletionDismissed] = useState(false)
-  const [delayedCompletion, setDelayedCompletion] = useState(false)
 
-  // Phase C: show CompletionModal after celebration animation finishes (~2.5s)
-  useEffect(() => {
-    if (state.isComplete) {
-      const timer = setTimeout(() => setDelayedCompletion(true), 2500)
-      return () => clearTimeout(timer)
-    }
-    setDelayedCompletion(false)
-  }, [state.isComplete])
+  const {
+    state, movableIndices, isShuffling, timer, showHint, setShowHint,
+    completionDismissed, setCompletionDismissed, delayedCompletion,
+    moveTile, moveByDirection, handleShuffle, handleDifficultyChange, togglePause,
+  } = usePuzzleController(sound, imageReady)
 
   const handleImageReady = useCallback(async (data: string) => {
     try {
       await loadImage(data)
       setImageThumb(data)
       setImageReady(true)
-      reset(3)
-      timer.reset()
-      setShowHint(false)
+      handleShuffle()
     } catch {
       alert('图片加载失败，请重试')
     }
-  }, [reset, timer])
-
-  const handleDifficultyChange = useCallback((size: Difficulty) => {
-    if (!imageReady) return
-    changeDifficulty(size)
-    timer.reset()
-    setShowHint(false)
-  }, [imageReady, changeDifficulty, timer])
-
-  // Keyboard controls
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (!imageReady || state.isPaused || state.isComplete || isShuffling) return
-      switch (e.key) {
-        case 'ArrowUp':    e.preventDefault(); moveByDirection('up'); break
-        case 'ArrowDown':  e.preventDefault(); moveByDirection('down'); break
-        case 'ArrowLeft':  e.preventDefault(); moveByDirection('left'); break
-        case 'ArrowRight': e.preventDefault(); moveByDirection('right'); break
-      }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [imageReady, state.isPaused, state.isComplete, moveByDirection, isShuffling])
-
-  // Sound effects on move
-  const prevMoveCountRef = useRef(state.moveCount)
-  useEffect(() => {
-    if (state.moveCount > prevMoveCountRef.current) {
-      sound.playMove(state.size)
-    }
-    prevMoveCountRef.current = state.moveCount
-  }, [state.moveCount, sound])
-
-  // Sound on complete
-  useEffect(() => {
-    if (state.isComplete) {
-      sound.playComplete()
-    }
-  }, [state.isComplete, sound])
-
-  const handleShuffle = useCallback(() => {
-    reset()
-    timer.reset()
-    setShowHint(false)
-    setCompletionDismissed(false)
-  }, [reset, timer])
+  }, [handleShuffle])
 
   if (!imageReady) {
     return (
@@ -120,7 +64,7 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
         <button className={styles.referenceBtn} onClick={() => { setImageReady(false); setImageThumb(''); setCompletionDismissed(false); }}>🔄 更换图片</button>
       </div>
       <GameStats time={timer.time} moves={state.moveCount} showHint={showHint} onToggleHint={() => setShowHint(h => !h)} />
-      <GameControls onShuffle={handleShuffle} onPause={togglePause} onReset={() => { reset(); timer.reset() }} isPaused={state.isPaused} />
+      <GameControls onShuffle={handleShuffle} onPause={togglePause} onReset={handleShuffle} isPaused={state.isPaused} />
       <DirectionPad onDirection={moveByDirection} />
       {showReference && (
         <div className={styles.overlay} onClick={() => setShowReference(false)}>
