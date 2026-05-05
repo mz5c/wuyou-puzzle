@@ -104,7 +104,7 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   return (
     <div className={styles.page}>
       <DifficultySelector current={state.size} onChange={handleDifficultyChange} />
-      <PuzzleBoard state={state} movableIndices={showHint ? movableIndices : []} isImageMode={true} imageSrc={imageThumb} onTileClick={moveTile} />
+      <PuzzleBoard state={state} movableIndices={movableIndices} isImageMode={true} imageSrc={imageThumb} onTileClick={moveTile} showHints={showHint} />
       <div className={styles.imageActions}>
         <button className={styles.referenceBtn} onClick={() => setShowReference(r => !r)}>🖼 查看原图</button>
         <button className={styles.referenceBtn} onClick={() => { setImageReady(false); setImageThumb(''); setCompletionDismissed(false); }}>🔄 更换图片</button>

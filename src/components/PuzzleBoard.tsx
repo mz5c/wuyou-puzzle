@@ -9,9 +9,10 @@ interface PuzzleBoardProps {
   isImageMode: boolean
   imageSrc?: string
   onTileClick: (index: number) => void
+  showHints?: boolean
 }
 
-export default function PuzzleBoard({ state, movableIndices, isImageMode, imageSrc, onTileClick }: PuzzleBoardProps) {
+export default function PuzzleBoard({ state, movableIndices, isImageMode, imageSrc, onTileClick, showHints = true }: PuzzleBoardProps) {
   const moveLockedRef = useRef(false)
 
   const handleTileClick = (index: number) => {
@@ -35,7 +36,7 @@ export default function PuzzleBoard({ state, movableIndices, isImageMode, imageS
             size={state.size}
             col={col}
             row={row}
-            isMovable={movableIndices.includes(index)}
+            isMovable={showHints ? movableIndices.includes(index) : false}
             isImageMode={isImageMode}
             imageSrc={imageSrc}
             onClick={() => handleTileClick(index)}
