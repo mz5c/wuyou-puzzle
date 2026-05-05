@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import type { PuzzleGameState, Difficulty } from '../types'
 import { shuffleTiles } from '../utils/shuffle'
 
@@ -119,6 +119,10 @@ export function usePuzzleGame(initialSize: Difficulty = 3) {
   }, [])
 
   const movableIndices = getMovableIndices(state.tiles, state.emptyIndex, state.size)
+
+  useEffect(() => {
+    return () => clearTimeout(shuffleTimeoutRef.current)
+  }, [])
 
   return {
     state,

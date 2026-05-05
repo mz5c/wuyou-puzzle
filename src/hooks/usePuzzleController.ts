@@ -45,10 +45,15 @@ export function usePuzzleController(sound: ReturnType<typeof useSound>, enabled 
     prevMoveCountRef.current = state.moveCount
   }, [state.moveCount, state.size, sound])
 
-  // Sound on complete
+  // Sound on complete (guarded by ref to prevent re-fire on parent re-render)
+  const completionSoundPlayedRef = useRef(false)
   useEffect(() => {
-    if (state.isComplete) {
+    if (state.isComplete && !completionSoundPlayedRef.current) {
       sound.playComplete()
+      completionSoundPlayedRef.current = true
+    }
+    if (!state.isComplete) {
+      completionSoundPlayedRef.current = false
     }
   }, [state.isComplete, sound])
 
