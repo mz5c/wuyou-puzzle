@@ -1,12 +1,13 @@
 import { useState, useCallback } from 'react'
 import { playMoveSound, playInvalidSound, playCompleteSound, startBGM, stopBGM } from '../utils/sound'
+import type { Difficulty } from '../types'
 
 export function useSound() {
   const [soundEnabled, setSoundEnabled] = useState(true)
   const [bgmEnabled, setBgmEnabled] = useState(false)
 
-  const playMove = useCallback(() => {
-    if (soundEnabled) playMoveSound()
+  const playMove = useCallback((difficulty?: Difficulty) => {
+    if (soundEnabled) playMoveSound(difficulty)
   }, [soundEnabled])
 
   const playInvalid = useCallback(() => {

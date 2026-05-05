@@ -84,7 +84,7 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   const prevMoveCountRef = useRef(state.moveCount)
   useEffect(() => {
     if (state.moveCount > prevMoveCountRef.current) {
-      sound.playMove()
+      sound.playMove(state.size)
     }
     prevMoveCountRef.current = state.moveCount
   }, [state.moveCount, sound])
