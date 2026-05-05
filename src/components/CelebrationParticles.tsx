@@ -35,7 +35,7 @@ export default function CelebrationParticles() {
     for (let i = 0; i < 50; i++) {
       const angle = (Math.PI * 2 * i) / 50 + (Math.random() - 0.5) * 0.5
       const speed = 2 + Math.random() * 4
-      const maxLife = 40 + Math.floor(Math.random() * 30)
+      const maxLife = 80 + Math.floor(Math.random() * 30)
       particles.push({
         x: cx,
         y: cy,
