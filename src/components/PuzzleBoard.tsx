@@ -18,7 +18,7 @@ export default function PuzzleBoard({ state, movableIndices, isImageMode, imageS
   const transitionDuration = isShuffling ? '600ms' : '200ms'
 
   const handleTileClick = (index: number) => {
-    if (moveLockedRef.current || state.isComplete) return
+    if (moveLockedRef.current || state.isComplete || isShuffling) return
     if (movableIndices.includes(index)) {
       moveLockedRef.current = true
       onTileClick(index)

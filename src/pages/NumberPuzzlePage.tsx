@@ -25,7 +25,7 @@ export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePag
   // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (state.isPaused || state.isComplete) return
+      if (state.isPaused || state.isComplete || isShuffling) return
       switch (e.key) {
         case 'ArrowUp':    e.preventDefault(); moveByDirection('up'); break
         case 'ArrowDown':  e.preventDefault(); moveByDirection('down'); break
@@ -35,7 +35,7 @@ export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePag
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [state.isPaused, state.isComplete, moveByDirection])
+  }, [state.isPaused, state.isComplete, moveByDirection, isShuffling])
 
   // Sound effects on move
   const prevMoveCountRef = useRef(state.moveCount)

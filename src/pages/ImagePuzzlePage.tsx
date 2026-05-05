@@ -58,7 +58,7 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   // Keyboard controls
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!imageReady || state.isPaused || state.isComplete) return
+      if (!imageReady || state.isPaused || state.isComplete || isShuffling) return
       switch (e.key) {
         case 'ArrowUp':    e.preventDefault(); moveByDirection('up'); break
         case 'ArrowDown':  e.preventDefault(); moveByDirection('down'); break
@@ -68,7 +68,7 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [imageReady, state.isPaused, state.isComplete, moveByDirection])
+  }, [imageReady, state.isPaused, state.isComplete, moveByDirection, isShuffling])
 
   // Sound effects on move
   const prevMoveCountRef = useRef(state.moveCount)

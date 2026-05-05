@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef } from 'react'
 import type { PuzzleGameState, Difficulty } from '../types'
 import { shuffleTiles } from '../utils/shuffle'
 
@@ -18,6 +18,7 @@ function createInitialState(size: Difficulty): PuzzleGameState {
 export function usePuzzleGame(initialSize: Difficulty = 3) {
   const [state, setState] = useState<PuzzleGameState>(() => createInitialState(initialSize))
   const [isShuffling, setIsShuffling] = useState(false)
+  const shuffleTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   const isAdjacent = useCallback((index: number, emptyIndex: number, size: number): boolean => {
     const row = Math.floor(index / size)
@@ -100,9 +101,10 @@ export function usePuzzleGame(initialSize: Difficulty = 3) {
   }, [])
 
   const reset = useCallback((size?: Difficulty) => {
+    clearTimeout(shuffleTimeoutRef.current)
     setState(prev => createInitialState(size ?? prev.size))
     setIsShuffling(true)
-    setTimeout(() => setIsShuffling(false), 600)
+    shuffleTimeoutRef.current = setTimeout(() => setIsShuffling(false), 600)
   }, [])
 
   const togglePause = useCallback(() => {
@@ -110,9 +112,10 @@ export function usePuzzleGame(initialSize: Difficulty = 3) {
   }, [])
 
   const changeDifficulty = useCallback((size: Difficulty) => {
+    clearTimeout(shuffleTimeoutRef.current)
     setState(createInitialState(size))
     setIsShuffling(true)
-    setTimeout(() => setIsShuffling(false), 600)
+    shuffleTimeoutRef.current = setTimeout(() => setIsShuffling(false), 600)
   }, [])
 
   const movableIndices = getMovableIndices(state.tiles, state.emptyIndex, state.size)
