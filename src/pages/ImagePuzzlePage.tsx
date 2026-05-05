@@ -27,7 +27,7 @@ function loadImage(src: string): Promise<HTMLImageElement> {
 }
 
 export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageProps) {
-  const { state, movableIndices, moveTile, moveByDirection, reset, togglePause, changeDifficulty } = usePuzzleGame(3)
+  const { state, movableIndices, moveTile, moveByDirection, reset, togglePause, changeDifficulty, isShuffling } = usePuzzleGame(3)
   const timer = useTimer(state.isPaused, state.isComplete, state.hasStarted)
   const [imageReady, setImageReady] = useState(false)
   const [imageThumb, setImageThumb] = useState('')
@@ -104,7 +104,7 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   return (
     <div className={styles.page}>
       <DifficultySelector current={state.size} onChange={handleDifficultyChange} />
-      <PuzzleBoard state={state} movableIndices={movableIndices} isImageMode={true} imageSrc={imageThumb} onTileClick={moveTile} showHints={showHint} />
+      <PuzzleBoard state={state} movableIndices={movableIndices} isImageMode={true} imageSrc={imageThumb} onTileClick={moveTile} showHints={showHint} isShuffling={isShuffling} />
       <div className={styles.imageActions}>
         <button className={styles.referenceBtn} onClick={() => setShowReference(r => !r)}>🖼 查看原图</button>
         <button className={styles.referenceBtn} onClick={() => { setImageReady(false); setImageThumb(''); setCompletionDismissed(false); }}>🔄 更换图片</button>

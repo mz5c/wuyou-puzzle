@@ -10,10 +10,12 @@ interface PuzzleBoardProps {
   imageSrc?: string
   onTileClick: (index: number) => void
   showHints?: boolean
+  isShuffling?: boolean
 }
 
-export default function PuzzleBoard({ state, movableIndices, isImageMode, imageSrc, onTileClick, showHints = true }: PuzzleBoardProps) {
+export default function PuzzleBoard({ state, movableIndices, isImageMode, imageSrc, onTileClick, showHints = true, isShuffling = false }: PuzzleBoardProps) {
   const moveLockedRef = useRef(false)
+  const transitionDuration = isShuffling ? '600ms' : '200ms'
 
   const handleTileClick = (index: number) => {
     if (moveLockedRef.current || state.isComplete) return
@@ -40,6 +42,7 @@ export default function PuzzleBoard({ state, movableIndices, isImageMode, imageS
             isImageMode={isImageMode}
             imageSrc={imageSrc}
             onClick={() => handleTileClick(index)}
+            transitionDuration={transitionDuration}
           />
         )
       })}

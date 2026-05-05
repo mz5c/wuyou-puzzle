@@ -10,13 +10,18 @@ interface TileProps {
   isImageMode: boolean
   imageSrc?: string
   onClick: () => void
+  transitionDuration?: string
 }
 
-export default function Tile({ value, size, col, row, isMovable, isImageMode, imageSrc, onClick }: TileProps) {
+export default function Tile({ value, size, col, row, isMovable, isImageMode, imageSrc, onClick, transitionDuration }: TileProps) {
   const style: CSSProperties = {
     width: `${100 / size}%`,
     aspectRatio: '1',
     transform: `translate(${col * 100}%, ${row * 100}%)`,
+  }
+
+  if (transitionDuration) {
+    style.transition = `transform ${transitionDuration} ease-out, box-shadow 0.12s ease`
   }
 
   if (value === 0) {

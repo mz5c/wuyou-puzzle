@@ -17,7 +17,7 @@ interface NumberPuzzlePageProps {
 }
 
 export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePageProps) {
-  const { state, movableIndices, moveTile, moveByDirection, reset, togglePause, changeDifficulty } = usePuzzleGame(3)
+  const { state, movableIndices, moveTile, moveByDirection, reset, togglePause, changeDifficulty, isShuffling } = usePuzzleGame(3)
   const timer = useTimer(state.isPaused, state.isComplete, state.hasStarted)
   const [showHint, setShowHint] = useState(false)
   const [completionDismissed, setCompletionDismissed] = useState(false)
@@ -69,7 +69,7 @@ export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePag
   return (
     <div className={styles.page}>
       <DifficultySelector current={state.size} onChange={handleDifficultyChange} />
-      <PuzzleBoard state={state} movableIndices={movableIndices} isImageMode={false} onTileClick={moveTile} showHints={showHint} />
+      <PuzzleBoard state={state} movableIndices={movableIndices} isImageMode={false} onTileClick={moveTile} showHints={showHint} isShuffling={isShuffling} />
       <GameStats time={timer.time} moves={state.moveCount} showHint={showHint} onToggleHint={() => setShowHint(h => !h)} />
       <GameControls onShuffle={handleShuffle} onPause={togglePause} onReset={handleShuffle} isPaused={state.isPaused} />
       <DirectionPad onDirection={moveByDirection} />
