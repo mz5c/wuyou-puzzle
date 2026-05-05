@@ -1,21 +1,29 @@
-import type { CSSProperties } from 'react'
+import { type CSSProperties } from 'react'
 import styles from './Tile.module.css'
 
 interface TileProps {
   value: number
   size: number
+  col: number
+  row: number
   isMovable: boolean
   isImageMode: boolean
   imageSrc?: string
   onClick: () => void
 }
 
-export default function Tile({ value, size, isMovable, isImageMode, imageSrc, onClick }: TileProps) {
+export default function Tile({ value, size, col, row, isMovable, isImageMode, imageSrc, onClick }: TileProps) {
+  const style: CSSProperties = {
+    width: `${100 / size}%`,
+    aspectRatio: '1',
+    transform: `translate(${col * 100}%, ${row * 100}%)`,
+  }
+
   if (value === 0) {
     return (
       <div
         className={`${styles.tile} ${isImageMode ? styles.imageEmpty : styles.empty}`}
-        style={{ width: `${100 / size}%`, aspectRatio: '1' }}
+        style={style}
       />
     )
   }
@@ -29,18 +37,13 @@ export default function Tile({ value, size, isMovable, isImageMode, imageSrc, on
     classNames.push(styles.numberTile)
   }
 
-  const style: CSSProperties = {
-    width: `${100 / size}%`,
-    aspectRatio: '1',
-  }
-
   if (isImageMode && imageSrc) {
     style.backgroundImage = `url(${imageSrc})`
     style.backgroundSize = `${size * 100}%`
     const tileIndex = value - 1
-    const row = Math.floor(tileIndex / size)
-    const col = tileIndex % size
-    style.backgroundPosition = `-${col * 100}% -${row * 100}%`
+    const tileRow = Math.floor(tileIndex / size)
+    const tileCol = tileIndex % size
+    style.backgroundPosition = `-${tileCol * 100}% -${tileRow * 100}%`
   }
 
   return (

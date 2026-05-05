@@ -1,6 +1,5 @@
 .board {
-  display: flex;
-  flex-wrap: wrap;
+  position: relative;
   background: #e8ecf1;
   border-radius: 14px;
   padding: 6px;
@@ -8,4 +7,5 @@
   aspect-ratio: 1;
   max-width: 400px;
   margin: 0 auto;
+  overflow: hidden;
 }

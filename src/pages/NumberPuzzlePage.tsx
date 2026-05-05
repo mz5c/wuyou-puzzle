@@ -53,12 +53,6 @@ export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePag
     }
   }, [state.isComplete, sound])
 
-  const handleTileClick = useCallback((index: number) => {
-    if (movableIndices.includes(index)) {
-      moveTile(index)
-    }
-  }, [movableIndices, moveTile])
-
   const handleShuffle = useCallback(() => {
     reset()
     timer.reset()
@@ -75,7 +69,7 @@ export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePag
   return (
     <div className={styles.page}>
       <DifficultySelector current={state.size} onChange={handleDifficultyChange} />
-      <PuzzleBoard state={state} movableIndices={showHint ? movableIndices : []} isImageMode={false} onTileClick={handleTileClick} />
+      <PuzzleBoard state={state} movableIndices={showHint ? movableIndices : []} isImageMode={false} onTileClick={moveTile} />
       <GameStats time={timer.time} moves={state.moveCount} showHint={showHint} onToggleHint={() => setShowHint(h => !h)} />
       <GameControls onShuffle={handleShuffle} onPause={togglePause} onReset={handleShuffle} isPaused={state.isPaused} />
       <DirectionPad onDirection={moveByDirection} />

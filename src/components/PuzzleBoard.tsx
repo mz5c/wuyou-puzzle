@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import Tile from './Tile'
 import styles from './PuzzleBoard.module.css'
 import type { PuzzleGameState } from '../types'
@@ -11,19 +12,36 @@ interface PuzzleBoardProps {
 }
 
 export default function PuzzleBoard({ state, movableIndices, isImageMode, imageSrc, onTileClick }: PuzzleBoardProps) {
+  const moveLockedRef = useRef(false)
+
+  const handleTileClick = (index: number) => {
+    if (moveLockedRef.current || state.isComplete) return
+    if (movableIndices.includes(index)) {
+      moveLockedRef.current = true
+      onTileClick(index)
+      setTimeout(() => { moveLockedRef.current = false }, 200)
+    }
+  }
+
   return (
     <div className={styles.board}>
-      {state.tiles.map((value, index) => (
-        <Tile
-          key={index}
-          value={value}
-          size={state.size}
-          isMovable={movableIndices.includes(index)}
-          isImageMode={isImageMode}
-          imageSrc={imageSrc}
-          onClick={() => onTileClick(index)}
-        />
-      ))}
+      {state.tiles.map((value, index) => {
+        const row = Math.floor(index / state.size)
+        const col = index % state.size
+        return (
+          <Tile
+            key={value}
+            value={value}
+            size={state.size}
+            col={col}
+            row={row}
+            isMovable={movableIndices.includes(index)}
+            isImageMode={isImageMode}
+            imageSrc={imageSrc}
+            onClick={() => handleTileClick(index)}
+          />
+        )
+      })}
     </div>
   )
 }

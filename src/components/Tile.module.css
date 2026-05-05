@@ -1,19 +1,22 @@
 .tile {
+  position: absolute;
+  left: 0;
+  top: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 8px;
   cursor: pointer;
   user-select: none;
-  transition: transform 0.12s ease, box-shadow 0.12s ease;
+  transition: transform 200ms ease-out, box-shadow 0.12s ease;
 }
 
 .tile:hover {
-  transform: scale(1.04);
+  filter: brightness(1.08);
 }
 
 .tile:active {
-  transform: scale(0.96);
+  filter: brightness(0.95);
 }
 
 .numberTile {
@@ -29,13 +32,9 @@
 }
 
 .empty {
-  background: #d5dbe3;
+  background: transparent;
   cursor: default;
-}
-
-.empty:hover {
-  transform: none;
-  box-shadow: none;
+  pointer-events: none;
 }
 
 .movable {
@@ -59,6 +58,7 @@
 .imageEmpty {
   background: transparent;
   cursor: default;
+  pointer-events: none;
 }
 
 @keyframes pulse {

@@ -86,12 +86,6 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
     }
   }, [state.isComplete, sound])
 
-  const handleTileClick = useCallback((index: number) => {
-    if (movableIndices.includes(index)) {
-      moveTile(index)
-    }
-  }, [movableIndices, moveTile])
-
   const handleShuffle = useCallback(() => {
     reset()
     timer.reset()
@@ -110,7 +104,7 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   return (
     <div className={styles.page}>
       <DifficultySelector current={state.size} onChange={handleDifficultyChange} />
-      <PuzzleBoard state={state} movableIndices={showHint ? movableIndices : []} isImageMode={true} imageSrc={imageThumb} onTileClick={handleTileClick} />
+      <PuzzleBoard state={state} movableIndices={showHint ? movableIndices : []} isImageMode={true} imageSrc={imageThumb} onTileClick={moveTile} />
       <div className={styles.imageActions}>
         <button className={styles.referenceBtn} onClick={() => setShowReference(r => !r)}>🖼 查看原图</button>
         <button className={styles.referenceBtn} onClick={() => { setImageReady(false); setImageThumb(''); setCompletionDismissed(false); }}>🔄 更换图片</button>
