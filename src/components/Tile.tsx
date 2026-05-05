@@ -11,9 +11,10 @@ interface TileProps {
   imageSrc?: string
   onClick: () => void
   transitionDuration?: string
+  celebrateDelay?: number
 }
 
-function Tile({ value, size, col, row, isMovable, isImageMode, imageSrc, onClick, transitionDuration }: TileProps) {
+function Tile({ value, size, col, row, isMovable, isImageMode, imageSrc, onClick, transitionDuration, celebrateDelay }: TileProps) {
   const style: CSSProperties = {
     width: `${100 / size}%`,
     aspectRatio: '1',
@@ -51,6 +52,12 @@ function Tile({ value, size, col, row, isMovable, isImageMode, imageSrc, onClick
     style.backgroundPosition = `-${tileCol * 100}% -${tileRow * 100}%`
   }
 
+  if (celebrateDelay !== undefined) {
+    classNames.push(styles.celebrate)
+    style.animationDelay = `${celebrateDelay}ms`
+    style.animationDuration = '0.4s'
+  }
+
   return (
     <div
       className={classNames.join(' ')}
@@ -70,5 +77,6 @@ export default memo(Tile, (prev, next) => {
     prev.isMovable === next.isMovable &&
     prev.isImageMode === next.isImageMode &&
     prev.imageSrc === next.imageSrc &&
-    prev.transitionDuration === next.transitionDuration
+    prev.transitionDuration === next.transitionDuration &&
+    prev.celebrateDelay === next.celebrateDelay
 })

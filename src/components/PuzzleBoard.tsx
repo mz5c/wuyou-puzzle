@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import Tile from './Tile'
+import CelebrationParticles from './CelebrationParticles'
 import styles from './PuzzleBoard.module.css'
 import type { PuzzleGameState } from '../types'
 
@@ -28,9 +29,11 @@ export default function PuzzleBoard({ state, movableIndices, isImageMode, imageS
 
   return (
     <div className={styles.board}>
+      {state.isComplete && <CelebrationParticles />}
       {state.tiles.map((value, index) => {
         const row = Math.floor(index / state.size)
         const col = index % state.size
+        const celebrateDelay = state.isComplete ? (row * state.size + col) * 40 : undefined
         return (
           <Tile
             key={value}
@@ -43,6 +46,7 @@ export default function PuzzleBoard({ state, movableIndices, isImageMode, imageS
             imageSrc={imageSrc}
             onClick={() => handleTileClick(index)}
             transitionDuration={transitionDuration}
+            celebrateDelay={celebrateDelay}
           />
         )
       })}
