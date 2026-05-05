@@ -34,6 +34,16 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
   const [showHint, setShowHint] = useState(false)
   const [showReference, setShowReference] = useState(false)
   const [completionDismissed, setCompletionDismissed] = useState(false)
+  const [delayedCompletion, setDelayedCompletion] = useState(false)
+
+  // Phase C: show CompletionModal after celebration animation finishes (~2.5s)
+  useEffect(() => {
+    if (state.isComplete) {
+      const timer = setTimeout(() => setDelayedCompletion(true), 2500)
+      return () => clearTimeout(timer)
+    }
+    setDelayedCompletion(false)
+  }, [state.isComplete])
 
   const handleImageReady = useCallback(async (data: string) => {
     try {
@@ -117,7 +127,7 @@ export default function ImagePuzzlePage({ sound, onSaveScore }: ImagePuzzlePageP
           <img src={imageThumb} alt="原图参考" className={styles.referenceImg} />
         </div>
       )}
-      {state.isComplete && !completionDismissed && (
+      {delayedCompletion && !completionDismissed && (
         <CompletionModal time={timer.time} moves={state.moveCount} onSave={name => { onSaveScore(timer.time, state.moveCount, state.size, name, imageThumb); setCompletionDismissed(true) }} onClose={() => setCompletionDismissed(true)} />
       )}
     </div>

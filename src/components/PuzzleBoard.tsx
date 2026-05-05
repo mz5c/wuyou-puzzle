@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Tile from './Tile'
 import CelebrationParticles from './CelebrationParticles'
 import styles from './PuzzleBoard.module.css'
@@ -17,6 +17,16 @@ interface PuzzleBoardProps {
 export default function PuzzleBoard({ state, movableIndices, isImageMode, imageSrc, onTileClick, showHints = true, isShuffling = false }: PuzzleBoardProps) {
   const moveLockedRef = useRef(false)
   const transitionDuration = isShuffling ? '600ms' : '200ms'
+  const [showParticles, setShowParticles] = useState(false)
+
+  // Phase B: show CelebrationParticles after tile flash wave completes (~1s)
+  useEffect(() => {
+    if (state.isComplete) {
+      const timer = setTimeout(() => setShowParticles(true), 1000)
+      return () => clearTimeout(timer)
+    }
+    setShowParticles(false)
+  }, [state.isComplete])
 
   const handleTileClick = (index: number) => {
     if (moveLockedRef.current || state.isComplete || isShuffling) return
@@ -29,7 +39,7 @@ export default function PuzzleBoard({ state, movableIndices, isImageMode, imageS
 
   return (
     <div className={styles.board}>
-      {state.isComplete && <CelebrationParticles />}
+      {showParticles && <CelebrationParticles />}
       {state.tiles.map((value, index) => {
         const row = Math.floor(index / state.size)
         const col = index % state.size

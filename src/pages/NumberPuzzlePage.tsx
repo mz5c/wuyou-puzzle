@@ -21,6 +21,16 @@ export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePag
   const timer = useTimer(state.isPaused, state.isComplete, state.hasStarted)
   const [showHint, setShowHint] = useState(false)
   const [completionDismissed, setCompletionDismissed] = useState(false)
+  const [delayedCompletion, setDelayedCompletion] = useState(false)
+
+  // Phase C: show CompletionModal after celebration animation finishes (~2.5s)
+  useEffect(() => {
+    if (state.isComplete) {
+      const timer = setTimeout(() => setDelayedCompletion(true), 2500)
+      return () => clearTimeout(timer)
+    }
+    setDelayedCompletion(false)
+  }, [state.isComplete])
 
   // Keyboard controls
   useEffect(() => {
@@ -73,7 +83,7 @@ export default function NumberPuzzlePage({ sound, onSaveScore }: NumberPuzzlePag
       <GameStats time={timer.time} moves={state.moveCount} showHint={showHint} onToggleHint={() => setShowHint(h => !h)} />
       <GameControls onShuffle={handleShuffle} onPause={togglePause} onReset={handleShuffle} isPaused={state.isPaused} />
       <DirectionPad onDirection={moveByDirection} />
-      {state.isComplete && !completionDismissed && (
+      {delayedCompletion && !completionDismissed && (
         <CompletionModal time={timer.time} moves={state.moveCount} onSave={name => { onSaveScore(timer.time, state.moveCount, state.size, name); setCompletionDismissed(true) }} onClose={() => setCompletionDismissed(true)} />
       )}
     </div>
