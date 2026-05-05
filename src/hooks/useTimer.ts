@@ -3,6 +3,7 @@ import { useState, useRef, useCallback, useEffect } from 'react'
 export function useTimer(isPaused: boolean, isComplete: boolean, hasStarted: boolean) {
   const [time, setTime] = useState(0)
   const [resetKey, setResetKey] = useState(0)
+  const startTimeRef = useRef(0)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
   const clearTimer = useCallback(() => {
@@ -13,12 +14,16 @@ export function useTimer(isPaused: boolean, isComplete: boolean, hasStarted: boo
   }, [])
 
   useEffect(() => {
-    if (!hasStarted || isPaused || isComplete) {
+    if (hasStarted && !isPaused && !isComplete) {
+      if (!intervalRef.current) {
+        startTimeRef.current = performance.now()
+        intervalRef.current = setInterval(() => {
+          const elapsed = Math.floor((performance.now() - startTimeRef.current) / 1000)
+          setTime(elapsed)
+        }, 1000)
+      }
+    } else {
       clearTimer()
-    } else if (!intervalRef.current) {
-      intervalRef.current = setInterval(() => {
-        setTime(t => t + 1)
-      }, 1000)
     }
     return clearTimer
   }, [hasStarted, isPaused, isComplete, clearTimer, resetKey])
