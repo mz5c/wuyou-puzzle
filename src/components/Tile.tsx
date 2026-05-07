@@ -1,4 +1,4 @@
-import { type CSSProperties, memo } from 'react'
+import { type CSSProperties, memo, useLayoutEffect, useRef } from 'react'
 import styles from './Tile.module.css'
 
 interface TileProps {
@@ -15,19 +15,39 @@ interface TileProps {
 }
 
 function Tile({ value, size, col, row, isMovable, isImageMode, imageSrc, onClick, transitionDuration, celebrateDelay }: TileProps) {
+  const tileRef = useRef<HTMLDivElement>(null)
+  const prevPosRef = useRef({ col, row })
+
+  useLayoutEffect(() => {
+    const el = tileRef.current
+    if (!el) return
+
+    const prev = prevPosRef.current
+    if (prev.col !== col || prev.row !== row) {
+      el.getAnimations().forEach(anim => anim.cancel())
+      const duration = transitionDuration ? parseInt(transitionDuration) : 200
+      el.animate([
+        { transform: `translate(${prev.col * 100}%, ${prev.row * 100}%)` },
+        { transform: `translate(${col * 100}%, ${row * 100}%)` },
+      ], {
+        duration,
+        easing: 'ease-out',
+      })
+    }
+
+    prevPosRef.current = { col, row }
+  }, [col, row, transitionDuration])
+
   const style: CSSProperties = {
     width: `${100 / size}%`,
     aspectRatio: '1',
     transform: `translate(${col * 100}%, ${row * 100}%)`,
   }
 
-  if (transitionDuration) {
-    style.transition = `transform ${transitionDuration} ease-out, box-shadow 0.12s ease`
-  }
-
   if (value === 0) {
     return (
       <div
+        ref={tileRef}
         className={`${styles.tile} ${isImageMode ? styles.imageEmpty : styles.empty}`}
         style={style}
       />
@@ -60,6 +80,7 @@ function Tile({ value, size, col, row, isMovable, isImageMode, imageSrc, onClick
 
   return (
     <div
+      ref={tileRef}
       className={classNames.join(' ')}
       style={style}
       onClick={onClick}
@@ -78,5 +99,6 @@ export default memo(Tile, (prev, next) => {
     prev.isImageMode === next.isImageMode &&
     prev.imageSrc === next.imageSrc &&
     prev.transitionDuration === next.transitionDuration &&
-    prev.celebrateDelay === next.celebrateDelay
+    prev.celebrateDelay === next.celebrateDelay &&
+    prev.onClick === next.onClick
 })
